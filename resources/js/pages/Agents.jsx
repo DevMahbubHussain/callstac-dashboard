@@ -66,7 +66,9 @@ const Agents = () => {
               key={agent.id}
               onClick={() => handleAgentClick(agent)}
               className={`bg-white rounded-xl border p-4 cursor-pointer transition-all ${
-                selectedAgent?.id === agent.id ? 'border-blue-500 ring-2 ring-blue-200' : 'border-slate-200'
+                selectedAgent?.id === agent.id
+                  ? 'border-blue-500 ring-2 ring-blue-200 shadow-md'
+                  : 'border-slate-200 hover:border-slate-300 hover:shadow-md'
               }`}
             >
               <div className="flex items-center justify-between">

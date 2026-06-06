@@ -67,7 +67,7 @@ const Overview = () => {
         {/* Agent Status */}
         <div>
           <h2 className="text-lg font-semibold text-slate-900 mb-4">Agent Availability</h2>
-          <div className="bg-white rounded-xl border border-slate-200 p-6">
+          <div className="bg-white rounded-xl border border-slate-200 p-6 hover:shadow-md transition-shadow duration-200">
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">

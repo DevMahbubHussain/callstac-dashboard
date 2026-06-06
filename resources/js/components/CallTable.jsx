@@ -65,7 +65,7 @@ const CallTable = ({ calls, onCallClick }) => {
                 <tr
                   key={call.id}
                   onClick={() => onCallClick?.(call)}
-                  className="hover:bg-slate-50 cursor-pointer transition-colors"
+                  className="hover:bg-slate-50 cursor-pointer transition-colors duration-150"
                 >
                   <td className="px-6 py-4">
                     <div>

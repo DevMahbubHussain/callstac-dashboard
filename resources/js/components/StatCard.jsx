@@ -15,12 +15,20 @@ const colors = {
   orange: 'bg-orange-500',
 };
 
+const hoverColors = {
+  blue: 'group-hover:bg-blue-600',
+  green: 'group-hover:bg-green-600',
+  purple: 'group-hover:bg-purple-600',
+  orange: 'group-hover:bg-orange-600',
+};
+
 const StatCard = ({ title, value, icon, color = 'blue', trend }) => {
   const Icon = icons[icon] || Phone;
   const bgColor = colors[color] || colors.blue;
+  const hoverBgColor = hoverColors[color] || hoverColors.blue;
 
   return (
-    <div className="bg-white rounded-xl p-6 border border-slate-200">
+    <div className="group bg-white rounded-xl p-6 border border-slate-200 hover:border-slate-300 hover:shadow-md transition-all duration-200 cursor-default">
       <div className="flex items-center justify-between">
         <div>
           <p className="text-slate-500 text-sm font-medium">{title}</p>
@@ -31,7 +39,7 @@ const StatCard = ({ title, value, icon, color = 'blue', trend }) => {
             </p>
           )}
         </div>
-        <div className={`w-12 h-12 ${bgColor} rounded-lg flex items-center justify-center`}>
+        <div className={`w-12 h-12 ${bgColor} ${hoverBgColor} rounded-lg flex items-center justify-center transition-colors duration-200`}>
           <Icon className="w-6 h-6 text-white" />
         </div>
       </div>

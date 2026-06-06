@@ -80,7 +80,7 @@ const Reports = () => {
         </div>
         <button
           onClick={handleExport}
-          className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+          className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 hover:shadow-md hover:shadow-blue-600/20 transition-all duration-200"
         >
           <Download className="w-4 h-4" />
           Export Report
@@ -115,7 +115,7 @@ const Reports = () => {
       {/* Charts Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Call Volume Chart */}
-        <div className="bg-white rounded-xl border border-slate-200 p-6">
+        <div className="bg-white rounded-xl border border-slate-200 p-6 hover:shadow-md transition-shadow duration-200">
           <h2 className="text-lg font-semibold text-slate-900 mb-4">Call Volume Trend</h2>
           <ResponsiveContainer width="100%" height={300}>
             <LineChart data={callVolume}>
@@ -130,7 +130,7 @@ const Reports = () => {
         </div>
 
         {/* Agent Performance Chart */}
-        <div className="bg-white rounded-xl border border-slate-200 p-6">
+        <div className="bg-white rounded-xl border border-slate-200 p-6 hover:shadow-md transition-shadow duration-200">
           <h2 className="text-lg font-semibold text-slate-900 mb-4">Agent Performance</h2>
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={agentPerformance.slice(0, 5)}>
@@ -146,7 +146,7 @@ const Reports = () => {
         </div>
 
         {/* Disposition Summary Chart */}
-        <div className="bg-white rounded-xl border border-slate-200 p-6">
+        <div className="bg-white rounded-xl border border-slate-200 p-6 hover:shadow-md transition-shadow duration-200">
           <h2 className="text-lg font-semibold text-slate-900 mb-4">Call Outcomes</h2>
           <ResponsiveContainer width="100%" height={300}>
             <PieChart>
@@ -170,7 +170,7 @@ const Reports = () => {
         </div>
 
         {/* Success Rate Table */}
-        <div className="bg-white rounded-xl border border-slate-200 p-6">
+        <div className="bg-white rounded-xl border border-slate-200 p-6 hover:shadow-md transition-shadow duration-200">
           <h2 className="text-lg font-semibold text-slate-900 mb-4">Agent Success Rates</h2>
           <div className="space-y-3">
             {agentPerformance.slice(0, 5).map((agent) => (

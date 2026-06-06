@@ -75,7 +75,7 @@ const Calls = () => {
             />
           </div>
 
-          <button className="flex items-center gap-2 px-4 py-2 border border-slate-300 rounded-lg hover:bg-slate-50">
+          <button className="flex items-center gap-2 px-4 py-2 border border-slate-300 rounded-lg hover:bg-slate-50 hover:border-slate-400 transition-all duration-150">
             <SlidersHorizontal className="w-4 h-4" />
             More Filters
           </button>
@@ -98,10 +98,10 @@ const Calls = () => {
             Showing {filteredCalls?.length} of {calls?.length} calls
           </p>
           <div className="flex gap-2">
-            <button className="px-4 py-2 border border-slate-300 rounded-lg hover:bg-slate-50 disabled:opacity-50">
+            <button className="px-4 py-2 border border-slate-300 rounded-lg hover:bg-slate-50 hover:border-slate-400 disabled:opacity-50 transition-all duration-150">
               Previous
             </button>
-            <button className="px-4 py-2 border border-slate-300 rounded-lg hover:bg-slate-50 disabled:opacity-50">
+            <button className="px-4 py-2 border border-slate-300 rounded-lg hover:bg-slate-50 hover:border-slate-400 disabled:opacity-50 transition-all duration-150">
               Next
             </button>
           </div>

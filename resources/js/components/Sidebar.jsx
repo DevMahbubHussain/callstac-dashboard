@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import {
   LayoutDashboard,
   Phone,
@@ -18,10 +18,26 @@ const navigation = [
 ];
 
 const Sidebar = () => {
+  const location = useLocation();
+
+  const isActive = (href) => {
+    if (href === '/') {
+      return location.pathname === '/';
+    }
+    return location.pathname.startsWith(href);
+  };
+
+  const navLinkClass = (href) =>
+    `flex items-center gap-3 px-3 py-2.5 rounded-lg font-medium transition-all duration-200 ${
+      isActive(href)
+        ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30'
+        : 'text-slate-400 hover:bg-slate-800/50 hover:text-slate-200'
+    }`;
+
   return (
     <div className="w-64 bg-slate-900 min-h-screen p-4">
       <div className="flex items-center gap-3 mb-8 px-2">
-        <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
+        <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center shadow-lg shadow-blue-600/30">
           <Phone className="w-6 h-6 text-white" />
         </div>
         <div>
@@ -35,10 +51,10 @@ const Sidebar = () => {
           <Link
             key={item.name}
             to={item.href}
-            className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-300 hover:bg-slate-800 hover:text-white transition-colors"
+            className={navLinkClass(item.href)}
           >
             <item.icon className="w-5 h-5" />
-            <span className="font-medium">{item.name}</span>
+            <span>{item.name}</span>
           </Link>
         ))}
       </nav>
@@ -46,10 +62,10 @@ const Sidebar = () => {
       <div className="absolute bottom-4 left-4 right-4">
         <Link
           to="/settings"
-          className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-300 hover:bg-slate-800 hover:text-white transition-colors"
+          className={navLinkClass('/settings')}
         >
           <Settings className="w-5 h-5" />
-          <span className="font-medium">Settings</span>
+          <span>Settings</span>
         </Link>
       </div>
     </div>
