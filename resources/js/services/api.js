@@ -1,4 +1,7 @@
-const API_BASE_URL = 'http://localhost:8000/api';
+// Use relative URL for same-origin requests, fallback to localhost for development
+const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+    ? '/api'  // Use relative path for local development
+    : '/api'; // Use relative path in production
 
 const api = {
   // Agents

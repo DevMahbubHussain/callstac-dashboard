@@ -17,18 +17,26 @@ return [
 
     'paths' => ['api/*', 'sanctum/csrf-cookie'],
 
-    'allowed_methods' => ['*'],
+    'allowed_methods' => ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
 
-    'allowed_origins' => ['*'],
+    'allowed_origins' => [
+        'http://localhost:8000',
+        'http://localhost:3000',
+        'http://localhost:5173',
+        'http://localhost:5174',
+    ],
 
-    'allowed_origins_patterns' => [],
+    'allowed_origins_patterns' => [
+        // Add regex patterns for dynamic domains if needed
+        // '/^http:\/\/localhost:\d+$/',
+    ],
 
-    'allowed_headers' => ['*'],
+    'allowed_headers' => ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept'],
 
     'exposed_headers' => [],
 
-    'max_age' => 0,
+    'max_age' => 86400, // 24 hours
 
-    'supports_credentials' => false,
+    'supports_credentials' => true,
 
 ];
