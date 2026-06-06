@@ -1,0 +1,137 @@
+version: '3.8'
+
+services:
+  # Nginx web server
+  nginx:
+    image: nginx:alpine
+    container_name: callstac-nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./:/var/www/html
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - app
+    networks:
+      - callstac-network
+
+  # Laravel PHP-FPM application
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: callstac-app
+    volumes:
+      - ./:/var/www/html
+    environment:
+      - APP_NAME=CallStac
+      - APP_ENV=production
+      - APP_KEY=${APP_KEY}
+      - APP_DEBUG=false
+      - APP_URL=http://localhost
+      - DB_CONNECTION=mysql
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - DB_DATABASE=callstac
+      - DB_USERNAME=callstac_user
+      - DB_PASSWORD=callstac_password
+    depends_on:
+      - mysql
+      - redis
+    networks:
+      - callstac-network
+
+  # MySQL database
+  mysql:
+    image: mysql:8.0
+    container_name: callstac-mysql
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=root_password
+      - MYSQL_DATABASE=callstac
+      - MYSQL_USER=callstac_user
+      - MYSQL_PASSWORD=callstac_password
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - callstac-network
+
+  # Redis for caching and queues
+  redis:
+    image: redis:alpine
+    container_name: callstac-redis
+    ports:
+      - "6379:6379"
+    networks:
+      - callstac-network
+
+  # Laravel Queue Worker
+  queue-worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: callstac-queue-worker
+    command: php artisan queue:work --tries=3 --timeout=90
+    volumes:
+      - ./:/var/www/html
+    environment:
+      - APP_NAME=CallStac
+      - APP_ENV=production
+      - APP_KEY=${APP_KEY}
+      - APP_DEBUG=false
+      - APP_URL=http://localhost
+      - DB_CONNECTION=mysql
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - DB_DATABASE=callstac
+      - DB_USERNAME=callstac_user
+      - DB_PASSWORD=callstac_password
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    depends_on:
+      - app
+      - redis
+    networks:
+      - callstac-network
+
+  # Laravel Scheduler (cron)
+  scheduler:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: callstac-scheduler
+    command: >
+      sh -c "
+      while true; do
+        php artisan schedule:run --verbose --no-interaction &
+        sleep 60
+      done
+      "
+    volumes:
+      - ./:/var/www/html
+    environment:
+      - APP_NAME=CallStac
+      - APP_ENV=production
+      - APP_KEY=${APP_KEY}
+      - APP_DEBUG=false
+      - APP_URL=http://localhost
+      - DB_CONNECTION=mysql
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - DB_DATABASE=callstac
+      - DB_USERNAME=callstac_user
+      - DB_PASSWORD=callstac_password
+    depends_on:
+      - app
+      - mysql
+    networks:
+      - callstac-network
+
+networks:
+  callstac-network:
+    driver: bridge
+
+volumes:
+  mysql_data:
+    driver: local

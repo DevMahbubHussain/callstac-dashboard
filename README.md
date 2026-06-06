@@ -6,6 +6,7 @@ A comprehensive call center management dashboard built with **Laravel 12** and *
 ![Laravel](https://img.shields.io/badge/Laravel-12.x-red.svg)
 ![React](https://img.shields.io/badge/React-18.x-blue.svg)
 ![PHP](https://img.shields.io/badge/PHP-8.2+-purple.svg)
+![Docker](https://img.shields.io/badge/Docker-Ready-blue.svg)
 
 ## 🚀 Features
 
@@ -35,6 +36,7 @@ A comprehensive call center management dashboard built with **Laravel 12** and *
 
 ## 📋 Requirements
 
+### Traditional Installation
 - **PHP**: 8.2 or higher
 - **Composer**: 2.x or higher
 - **Node.js**: 18.x or higher
@@ -42,15 +44,72 @@ A comprehensive call center management dashboard built with **Laravel 12** and *
 - **Database**: MySQL 8.0+ or PostgreSQL 12+
 - **Laravel**: 12.x
 
+### Docker Installation (Recommended)
+- **Docker**: 20.10+ and Docker Compose 2.0+
+- No PHP, Node.js, or database installation required
+- All dependencies included in containers
+
 ## 🔧 Installation
+
+### Choose Your Installation Method
+
+**🐳 Docker (Recommended)** - Fastest setup, all dependencies included
+**🔧 Traditional** - Full control, local development setup
+
+---
+
+## 🐳 Docker Installation (Recommended)
 
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/yourusername/callstac-dashboard.git
+git clone https://github.com/DevMahbubHussain/callstac-dashboard.git
 cd callstac-dashboard
 git checkout feature/call-center-dashboard
 ```
+
+### 2. Quick Start with Makefile
+
+```bash
+# Build and start all services
+make build
+make up
+
+# Generate application key
+make key
+
+# Setup database with seed data
+make fresh
+
+# Access at http://localhost
+```
+
+### 3. Manual Docker Start
+
+```bash
+# Configure environment
+cp .docker.env .env
+
+# Build containers
+docker-compose build
+
+# Start services
+docker-compose up -d
+
+# Setup application
+docker-compose exec app php artisan key:generate
+docker-compose exec app php artisan migrate:fresh --seed
+```
+
+### 4. Access the Application
+
+Open your browser at: **http://localhost**
+
+---
+
+## 🔧 Traditional Installation
+
+### 1. Clone the Repository
 
 ### 2. Install PHP Dependencies
 
@@ -94,6 +153,266 @@ This will create:
 - 10 sample agents with various statuses
 - 6 sample calls (4 active, 2 completed)
 - Sample customers and call dispositions
+
+## 🐳 Docker Deployment
+
+### Quick Docker Start
+
+The fastest way to get started with Docker:
+
+```bash
+# Clone and setup
+git clone https://github.com/DevMahbubHussain/callstac-dashboard.git
+cd callstac-dashboard
+git checkout feature/call-center-dashboard
+
+# Build and start all services
+make build
+make up
+
+# Wait for services to be ready, then setup
+sleep 10
+make key
+make fresh
+
+# Access the application
+open http://localhost
+```
+
+### Docker Services
+
+Our Docker setup includes:
+
+- **nginx**: Web server (port 80)
+- **app**: Laravel PHP-FPM application
+- **mysql**: MySQL 8.0 database (port 3306)
+- **redis**: Redis for caching and queues (port 6379)
+- **queue-worker**: Laravel background job processor
+- **scheduler**: Laravel task scheduler (cron)
+
+### Docker Commands
+
+#### Using Makefile (Recommended)
+
+```bash
+# Build containers
+make build
+
+# Start all services
+make up
+
+# Stop all services
+make down
+
+# Restart services
+make restart
+
+# View logs
+make logs
+
+# Access application shell
+make shell
+
+# Run migrations
+make migrate
+
+# Fresh migration with seed data
+make fresh
+
+# Run composer commands
+make composer ARGS="require laravel/sanctum"
+
+# Run npm commands
+make npm ARGS="run build"
+
+# Clear all caches
+make clear
+```
+
+#### Using docker-compose directly
+
+```bash
+# Build and start
+docker-compose up -d --build
+
+# Stop services
+docker-compose down
+
+# View logs
+docker-compose logs -f
+
+# Access application container
+docker-compose exec app bash
+
+# Run artisan commands
+docker-compose exec app php artisan migrate:fresh --seed
+
+# Install composer packages
+docker-compose exec app composer install
+
+# Run npm commands
+docker-compose exec app npm install
+```
+
+### Docker Environment Variables
+
+Create a `.docker.env` file for Docker-specific configuration:
+
+```env
+# Application
+APP_NAME=CallStac
+APP_ENV=production
+APP_KEY=base64:your-generated-app-key-here
+APP_DEBUG=false
+APP_URL=http://localhost
+
+# Database
+DB_CONNECTION=mysql
+DB_HOST=mysql
+DB_PORT=3306
+DB_DATABASE=callstac
+DB_USERNAME=callstac_user
+DB_PASSWORD=callstac_password
+
+# Redis
+REDIS_HOST=redis
+REDIS_PORT=6379
+
+# Queue
+QUEUE_CONNECTION=redis
+
+# Cache
+CACHE_DRIVER=redis
+SESSION_DRIVER=redis
+```
+
+### Development with Docker
+
+For development with hot-reload:
+
+```bash
+# Use development docker-compose
+docker-compose -f docker-compose.dev.yml up -d
+
+# Access logs
+docker-compose -f docker-compose.dev.yml logs -f
+```
+
+### Production Docker Deployment
+
+#### 1. Configure Environment
+
+```bash
+# Copy environment template
+cp .docker.env .env
+
+# Generate application key
+php artisan key:generate
+
+# Update production values in .env
+nano .env
+```
+
+#### 2. Build and Deploy
+
+```bash
+# Build production containers
+docker-compose build
+
+# Start production services
+docker-compose up -d
+
+# Run migrations
+docker-compose exec app php artisan migrate --force
+
+# Seed production data (optional)
+docker-compose exec app php artisan db:seed --force
+
+# Optimize application
+docker-compose exec app php artisan config:cache
+docker-compose exec app php artisan route:cache
+docker-compose exec app php artisan view:cache
+```
+
+#### 3. Production Considerations
+
+- **SSL/TLS**: Configure nginx with SSL certificates
+- **Environment Variables**: Never commit `.env` files
+- **Database Backups**: Implement regular backup strategy
+- **Monitoring**: Set up logging and monitoring
+- **Scaling**: Use Docker Swarm or Kubernetes for scaling
+
+### Docker Troubleshooting
+
+#### Container won't start
+
+```bash
+# Check logs
+docker-compose logs app
+
+# Rebuild containers
+docker-compose down
+docker-compose build --no-cache
+docker-compose up -d
+```
+
+#### Database connection issues
+
+```bash
+# Verify MySQL container is running
+docker-compose ps mysql
+
+# Check MySQL logs
+docker-compose logs mysql
+
+# Restart database
+docker-compose restart mysql
+```
+
+#### Permission issues
+
+```bash
+# Fix storage permissions
+docker-compose exec app chown -R www-data:www-data storage bootstrap/cache
+
+# Give write permissions
+docker-compose exec app chmod -R 775 storage bootstrap/cache
+```
+
+#### View container resource usage
+
+```bash
+docker stats
+```
+
+### Docker Architecture
+
+```
+┌─────────────┐
+│  nginx:80   │ ← Public access
+└──────┬──────┘
+       │
+┌──────▼──────────┐
+│  app:9000      │ ← PHP-FPM
+└──────┬──────────┘
+       │
+┌──────▼──────────┐      ┌──────────────┐
+│  mysql:3306    │      │ redis:6379   │
+└─────────────────┘      └──────────────┘
+       │                       │
+┌──────▼──────────┐      ┌──────▼───────┐
+│ queue-worker   │─────→│   redis     │
+└─────────────────┘      └──────────────┘
+       │
+┌──────▼──────────┐
+│  scheduler     │ ← Cron jobs
+└─────────────────┘
+```
+
+### Docker Volumes
+
+- **mysql_data**: Persistent MySQL data storage
+- **Redis**: In-memory (use volume for persistence if needed)
 
 ## 🎯 Quick Start
 
@@ -270,7 +589,43 @@ Key configuration files:
 
 ## 🚨 Troubleshooting
 
-### White Screen Issues
+### Docker Issues
+
+#### Container won't start
+```bash
+# Check logs
+docker-compose logs app
+
+# Rebuild containers
+docker-compose down
+docker-compose build --no-cache
+docker-compose up -d
+```
+
+#### Database connection in Docker
+```bash
+# Verify MySQL container
+docker-compose ps mysql
+
+# Check MySQL logs
+docker-compose logs mysql
+
+# Restart database
+docker-compose restart mysql
+```
+
+#### Permission issues
+```bash
+# Fix storage permissions
+docker-compose exec app chown -R www-data:www-data storage bootstrap/cache
+
+# Give write permissions
+docker-compose exec app chmod -R 775 storage bootstrap/cache
+```
+
+### Traditional Installation Issues
+
+#### White Screen Issues
 
 1. **Clear caches**:
 ```bash
@@ -282,13 +637,13 @@ npm run dev -- --force
 2. **Check Vite server** is running on correct port
 3. **Verify CORS configuration** in `config/cors.php`
 
-### API Not Responding
+#### API Not Responding
 
 1. **Check database connection** in `.env`
 2. **Run migrations**: `php artisan migrate:fresh`
 3. **Verify API routes**: `php artisan route:list --api`
 
-### React Errors
+#### React Errors
 
 1. **Check browser console** for JavaScript errors
 2. **Ensure all dependencies installed**: `npm install`
@@ -354,7 +709,10 @@ Built with ❤️ using Laravel 12 and React 18
 **Note**: This is a development-ready application. For production deployment, ensure you:
 - Set proper environment variables
 - Configure production database
-- Enable HTTPS
+- Enable HTTPS/SSL certificates
 - Set up proper authentication
 - Configure production-ready CORS settings
-- Optimize assets: `npm run build`
+- Use Docker for production deployment
+- Implement proper monitoring and logging
+- Set up database backup strategies
+- Configure firewall and security policies
